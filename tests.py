@@ -22,27 +22,20 @@ cases = {
     1001: 'MI',
     1900: 'MCM',
     1987: 'MCMLXXXVII',
-    50005: 50*'M'+'V'
+    50005: 50*'M'+'V',
 }
 
 
 class RomanNumeralTestCase(TestCase):
+    pass
 
-    def __init__(self, debug=False, *args, **kwargs):
-        self.debug = debug
-        for decimal_input, roman_output in cases.items():
-            def _current(self):
-                self.assertEquals(convert(decimal_input), roman_output)
-            setattr(RomanNumeralTestCase, 'test_'+roman_output, _current)
-        super(RomanNumeralTestCase, self).__init__(*args, **kwargs)
 
-    def test_all(self):
-        for decimal_input, roman_output in cases.items():
-            self.assertEquals(convert(decimal_input), roman_output)
+def make_function(decimal_input, roman_output):
+    def _current(self):
+        self.assertEquals(convert(decimal_input), roman_output)
+    _current.__name__ = 'test_'+str(decimal_input)
+    return _current
 
-    def runTest(self):
-        for test_method_name in [i for i in dir(self) if i.startswith('test')]:
-            test_method = getattr(self, test_method_name)
-            if callable(test_method):
-                test_method()
-                print("passed " + test_method_name)
+for k, v in cases.items():
+    f = make_function(k, v)
+    setattr(RomanNumeralTestCase, f.__name__, f)

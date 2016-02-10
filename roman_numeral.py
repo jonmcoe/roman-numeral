@@ -1,12 +1,22 @@
+import math
+
+
 DECIMAL_TO_ROMAN = {
-    1000: ('M', 100),
-    500: ('D', 100),
-    100: ('C', 10),
-    50: ('L', 10),
-    10: ('X', 1),
-    5: ('V', 1),
-    1: ('I', None)
+    1000: 'M',
+    500: 'D',
+    100: 'C',
+    50: 'L',
+    10: 'X',
+    5: 'V',
+    1: 'I'
 }
+
+
+def get_prefix(x):
+    """
+    :return: return greatest power of 10 small than 10
+    """
+    return 10**int(math.ceil(math.log(x, 10) - 1))
 
 
 def convert(decimal_input):
@@ -15,7 +25,8 @@ def convert(decimal_input):
 
     ans = ''
     for current in sorted(DECIMAL_TO_ROMAN.keys(), reverse=True):
-        current_roman, eligible_prefix = DECIMAL_TO_ROMAN[current]
+        current_roman = DECIMAL_TO_ROMAN[current]
+        eligible_prefix = get_prefix(current)
 
         if decimal_input >= current:
             x = (decimal_input // current)
@@ -24,6 +35,6 @@ def convert(decimal_input):
 
         if eligible_prefix and decimal_input >= current - eligible_prefix:
             decimal_input -= (current - eligible_prefix)
-            eligible_prefix_roman = DECIMAL_TO_ROMAN[eligible_prefix][0]
+            eligible_prefix_roman = DECIMAL_TO_ROMAN[eligible_prefix]
             ans += eligible_prefix_roman + current_roman
     return ans

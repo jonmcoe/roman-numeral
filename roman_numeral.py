@@ -14,7 +14,8 @@ DECIMAL_TO_ROMAN = {
 
 def get_prefix(x):
     """
-    :return: return greatest power of 10 small than 10
+    :param x: positive integer > 1
+    :return: return greatest power of 10 smaller than x
     """
     return 10**int(math.ceil(math.log(x, 10) - 1))
 

@@ -2,7 +2,7 @@ from unittest import TestCase
 
 from nose_parameterized import parameterized
 
-from roman_numeral import convert
+from roman_numeral import convert_to_decimal, convert_to_roman
 
 
 TEST_PARAMS = [
@@ -32,7 +32,14 @@ class RomanNumeralTestCase(TestCase):
 
     @parameterized.expand(
         TEST_PARAMS,
-        testcase_func_name=lambda func_name, _, params: 'test_{0}_is_{1}'.format(*params.args)
+        testcase_func_name=lambda func_name, _, params: 'test_decimal{0}_is_roman{1}'.format(*params.args)
     )
-    def test_(self, decimal, roman):
-        self.assertEquals(convert(int(decimal)), roman)
+    def test_decimal_to_roman(self, decimal, roman):
+        self.assertEquals(convert_to_roman(decimal), roman)
+
+    @parameterized.expand(
+        TEST_PARAMS,
+        testcase_func_name=lambda func_name, _, params: 'test_roman{0}_is_decimal{1}'.format(*params.args)
+    )
+    def test_decimal_to_roman(self, decimal, roman):
+        self.assertEquals(convert_to_decimal(roman), decimal)

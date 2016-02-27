@@ -14,13 +14,23 @@ DECIMAL_TO_ROMAN = {
 
 def get_prefix(x):
     """
-    :param x: positive integer > 1
-    :return: return greatest power of 10 smaller than x
+    :param x: positive integer
+    :return: return greatest power of 10 smaller than x if x > 1. else None
     """
-    return 10**int(math.ceil(math.log(x, 10) - 1))
+    return 10**int(math.ceil(math.log(x, 10) - 1)) if x > 1 else None
 
 
-def convert(decimal_input):
+roman_to_decimal = {}
+
+for decimal, roman in DECIMAL_TO_ROMAN.items():
+    roman_to_decimal[roman] = decimal
+    possible_prefix_decimal = get_prefix(decimal)
+    if possible_prefix_decimal:
+        prefix_roman = DECIMAL_TO_ROMAN[possible_prefix_decimal]
+        roman_to_decimal[prefix_roman + roman] = decimal - possible_prefix_decimal
+
+
+def convert_to_roman(decimal_input):
     if decimal_input == 0:
         return ''
 
@@ -39,3 +49,11 @@ def convert(decimal_input):
             eligible_prefix_roman = DECIMAL_TO_ROMAN[eligible_prefix]
             ans += eligible_prefix_roman + current_roman
     return ans
+
+
+def convert_to_decimal(roman_input):
+
+    if len(roman_input) > 1 and roman_to_decimal[roman_input[0]] < roman_to_decimal[roman_input[1]]:
+        return roman_to_decimal[roman_input[:2]] + convert_to_decimal(roman_input[2:])
+
+    return roman_to_decimal[roman_input[0]] + convert_to_decimal(roman_input[1:]) if roman_input else 0

@@ -52,8 +52,13 @@ def convert_to_roman(decimal_input):
 
 
 def convert_to_decimal(roman_input):
+    def _get_next(r):
+        for i in (2,1):
+            if r[:i] in roman_to_decimal:
+                return roman_to_decimal[r[:i]], r[i:]
 
-    if len(roman_input) > 1 and roman_to_decimal[roman_input[0]] < roman_to_decimal[roman_input[1]]:
-        return roman_to_decimal[roman_input[:2]] + convert_to_decimal(roman_input[2:])
+    if not roman_input:
+        return 0
 
-    return roman_to_decimal[roman_input[0]] + convert_to_decimal(roman_input[1:]) if roman_input else 0
+    current, rest = _get_next(roman_input)
+    return current + convert_to_decimal(rest)

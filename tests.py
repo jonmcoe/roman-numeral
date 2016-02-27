@@ -6,6 +6,7 @@ from roman_numeral import convert_to_decimal, convert_to_roman
 
 
 TEST_PARAMS = [
+    (0, ''),
     (1, 'I'),
     (3, 'III'),
     (4, 'IV'),

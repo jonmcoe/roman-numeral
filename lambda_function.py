@@ -11,6 +11,7 @@ def lambda_handler(event, context, *args, **kwargs):
         return None
 
     input_value = event['value']
+    input_value = input_value if isinstance(input_value, basestring) else str(input_value)
     try:
         to_roman = not input_value.isalpha()
 

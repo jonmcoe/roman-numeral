@@ -21,7 +21,6 @@ def get_prefix(x):
 
 
 roman_to_decimal = {}
-
 for decimal, roman in DECIMAL_TO_ROMAN.items():
     roman_to_decimal[roman] = decimal
     possible_prefix_decimal = get_prefix(decimal)
@@ -52,6 +51,11 @@ def convert_to_roman(decimal_input):
 
 
 def convert_to_decimal(roman_input):
+    """
+    Note - some technically invalid roman numerals like 'iiiii' evaluate
+    :param roman_input:
+    :return:
+    """
     def _get_next(r):
         for i in (2,1):
             if r[:i] in roman_to_decimal:
@@ -60,5 +64,10 @@ def convert_to_decimal(roman_input):
     if not roman_input:
         return 0
 
-    current, rest = _get_next(roman_input)
+    try:
+        roman_input = roman_input.upper()
+        current, rest = _get_next(roman_input)
+    except:
+        raise ValueError(roman_input)
+
     return current + convert_to_decimal(rest)

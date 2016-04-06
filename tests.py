@@ -44,3 +44,10 @@ class RomanNumeralTestCase(TestCase):
     )
     def test_decimal_to_roman(self, decimal, roman):
         self.assertEquals(convert_to_decimal(roman), decimal)
+
+    def test_bad_string_raises_value_error(self):
+        with self.assertRaises(ValueError):
+            convert_to_decimal('phish')
+
+    def test_lowercase_ok(self):
+        self.assertEquals(convert_to_decimal('v'), 5)

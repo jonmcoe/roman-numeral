@@ -42,7 +42,7 @@ class RomanNumeralTestCase(TestCase):
         TEST_PARAMS,
         testcase_func_name=lambda func_name, _, params: 'test_roman{0}_is_decimal{1}'.format(*params.args)
     )
-    def test_decimal_to_roman(self, decimal, roman):
+    def test_roman_to_decimal(self, decimal, roman):
         self.assertEquals(convert_to_decimal(roman), decimal)
 
     def test_bad_string_raises_value_error(self):

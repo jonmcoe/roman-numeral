@@ -35,25 +35,52 @@
   <body>
     <script src="https://code.jquery.com/jquery-1.12.3.min.js"></script>
     <script type="text/javascript">
+      var lastValue = "";
 
       function successFunc(data, status, xhr) {
         $('#output-field').html(data);
+        $('#input-field').css('background-color', 'white');
+
+        // TODO: remove when proper error codes from backend
+        if (data.indexOf('Bad') != -1) {
+          $('#input-field').css('background-color', 'red');
+        }
+      }
+
+      function validateData(x){
+        const operators = ['+', '-', '*', '/', '('];
+        const endCharacterOK = operators.indexOf(x[x.length - 1]) == -1;
+        const parensCountMatches = (x.match(/\(/g) || []).length == (x.match(/\)/g) || []).length;
+        console.log('validating: ' + x);
+        return endCharacterOK && parensCountMatches;
       }
 
       function performRequest(){
-        $.ajax(
-          "https://k1atkwso4b.execute-api.us-west-2.amazonaws.com/prod",
-          {
-              method: 'POST',
-              data: JSON.stringify({value: $('#input-field').val()}),
-              contentType: 'application/json',
-              success: successFunc,
-              dataType: 'text'
+        const inputData = $('#input-field').val().trim();
+
+        if (inputData != lastValue) {
+          if (validateData(inputData)) {
+            $.ajax(
+                    "https://k1atkwso4b.execute-api.us-west-2.amazonaws.com/prod",
+                    {
+                      method: 'POST',
+                      data: JSON.stringify({value: inputData}),
+                      contentType: 'application/json',
+                      success: successFunc,
+                      error: function() {$('#input-field').css('background-color', 'red');}, //doesnt work yet
+                      dataType: 'text'
+                    }
+            );
           }
-        );
+          else {
+            $('#input-field').css('background-color', 'red');
+          }
+        }
       }
+
+      $(document).ready(function(){$('#input-field').focus()})
     </script>
-    <input id="input-field" type="text" class="display-text" onkeypress="performRequest()"/>
+    <input id="input-field" type="text" class="display-text" onkeyup="performRequest()"/>
     <div class="display-text" id="output-field">ask me stuff</div>
 
   </body>

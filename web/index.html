@@ -5,8 +5,7 @@
     <title>Caesar Calculator</title>
     <style>
     body {
-      background-image: url("big_caesar.jpg");
-      background-repeat: no-repeat;
+      background: url("big_caesar.jpg") no-repeat black;
     }
 
     .display-text {
@@ -20,15 +19,14 @@
       top: 250px;
     }
 
-    #send-button{
-      position: absolute;
-      left: 0px;
-      top: 0px;
+    #output-field-roman {
+      left: 400px;
+      top: 420px;
     }
 
-    #output-field {
+    #output-field-decimal {
       left: 400px;
-      top: 450px;
+      top: 440px;
     }
     </style>
   </head>
@@ -38,20 +36,39 @@
       var lastValue = "";
 
       function successFunc(data, status, xhr) {
-        $('#output-field').html(data);
+        const dataObject = data.responseJSON;
+        $('#output-field-roman').html(dataObject['roman']);
+        $('#output-field-decimal').html(dataObject['decimal']);
         $('#input-field').css('background-color', 'white');
+      }
 
-        // TODO: remove when proper error codes from backend
-        if (data.indexOf('Bad') != -1) {
-          $('#input-field').css('background-color', 'red');
+      function errorFunc(data, status, xhr) {
+        const dataObject = data.responseJSON;
+        $('#output-field-roman').html(dataObject['errorMessage']);
+        $('#output-field-decimal').html(dataObject['errorMessage']);
+        $('#input-field').css('background-color', 'red');
+
+      }
+
+      //serves as a switch between successFunc and errorFunc until codes work right
+      function responseFunc(data, status, xhr) {
+        const dataObject = data.responseJSON;
+        console.log(dataObject);
+        if (dataObject['roman']) {
+            successFunc(data, status, xhr)
+        }
+        else if (dataObject['errorMessage']) {
+            errorFunc(data, status, xhr)
+        }
+        else {
+          console.log('problem')
         }
       }
 
-      function validateData(x){
+      function validateInputData(x){
         const operators = ['+', '-', '*', '/', '('];
         const endCharacterOK = operators.indexOf(x[x.length - 1]) == -1;
         const parensCountMatches = (x.match(/\(/g) || []).length == (x.match(/\)/g) || []).length;
-        console.log('validating: ' + x);
         return endCharacterOK && parensCountMatches;
       }
 
@@ -59,16 +76,17 @@
         const inputData = $('#input-field').val().trim();
 
         if (inputData != lastValue) {
-          if (validateData(inputData)) {
+          if (validateInputData(inputData)) {
             $.ajax(
-                    "https://k1atkwso4b.execute-api.us-west-2.amazonaws.com/prod",
+                    "https://a0p25chmzl.execute-api.us-east-1.amazonaws.com/prod",
                     {
                       method: 'POST',
                       data: JSON.stringify({value: inputData}),
                       contentType: 'application/json',
-                      success: successFunc,
-                      error: function() {$('#input-field').css('background-color', 'red');}, //doesnt work yet
-                      dataType: 'text'
+                      //success: responseFunc,
+                      //error: errorFunc,
+                      complete: responseFunc,
+                      dataType: 'json'
                     }
             );
           }
@@ -81,7 +99,9 @@
       $(document).ready(function(){$('#input-field').focus()})
     </script>
     <input id="input-field" type="text" class="display-text" onkeyup="performRequest()"/>
-    <div class="display-text" id="output-field">ask me stuff</div>
+    <div id="output-field-roman" class="display-text">roman</div>
+    <div id="output-field-decimal" class="display-text">decimal</div>
+
 
   </body>
 </html>

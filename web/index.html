@@ -37,7 +37,7 @@
 
       function successFunc(data, status, xhr) {
         const dataObject = data.responseJSON;
-        $('#output-field-roman').html(dataObject['roman']);
+        $('#output-field-roman').html(dataObject['roman'] || 'Non understandi negativus et zeroem');
         $('#output-field-decimal').html(dataObject['decimal']);
         $('#input-field').css('background-color', 'white');
       }
@@ -47,17 +47,16 @@
         $('#output-field-roman').html(dataObject['errorMessage']);
         $('#output-field-decimal').html(dataObject['errorMessage']);
         $('#input-field').css('background-color', 'red');
-
       }
 
       //serves as a switch between successFunc and errorFunc until codes work right
       function responseFunc(data, status, xhr) {
         const dataObject = data.responseJSON;
         console.log(dataObject);
-        if (dataObject['roman']) {
+        if ('roman' in dataObject) {
             successFunc(data, status, xhr)
         }
-        else if (dataObject['errorMessage']) {
+        else if ('errorMessage' in dataObject) {
             errorFunc(data, status, xhr)
         }
         else {
@@ -76,6 +75,7 @@
         const inputData = $('#input-field').val().trim();
 
         if (inputData != lastValue) {
+          console.log(inputData);
           if (validateInputData(inputData)) {
             $.ajax(
                     "https://a0p25chmzl.execute-api.us-east-1.amazonaws.com/prod",

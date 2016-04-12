@@ -78,7 +78,7 @@
           console.log(inputData);
           if (validateInputData(inputData)) {
             $.ajax(
-                    "https://a0p25chmzl.execute-api.us-east-1.amazonaws.com/prod",
+                    "https://a0p25chmzl.execute-api.us-east-1.amazonaws.com/prod", // API Gateway endpoint to Lambda
                     {
                       method: 'POST',
                       data: JSON.stringify({value: inputData}),

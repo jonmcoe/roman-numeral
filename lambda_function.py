@@ -6,7 +6,8 @@ import logging
 logger = logging.getLogger()
 
 
-def lambda_handler(event, context, *args, **kwargs):
+def lambda_handler(event, context):
+    context = None  # we don't use it, and don't want to potentially expose in the eval below
     if not event.get('value'):
         return None
 
@@ -15,11 +16,11 @@ def lambda_handler(event, context, *args, **kwargs):
 
     try:
         # extremely half-ass (quarter-ass?) parsing
-        initial_chunks = input_value.split(' ') # must have spaces between operators
+        initial_chunks = input_value.split(' ')  # must have spaces between operators and roman characters
         formatter = lambda x: str(convert_to_decimal(x.strip())) if x.isalpha() else x
         chunks = map(formatter, initial_chunks)
         final_string = ''.join(chunks)
-        ans = eval(final_string)  # unsafe? sure. but it's ok bc its an AWS lambda
+        ans = eval(final_string)  # unsafe? sure. but it's ok bc its an AWS lambda and not a "real" machine
 
         return {
             "roman": convert_to_roman(ans),

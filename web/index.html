@@ -57,7 +57,6 @@
         const inputData = $('#input-field').val().trim();
 
         if (inputData != lastValue) {
-          console.log(inputData);
           if (validateInputData(inputData)) {
             $.ajax(
                     "https://a0p25chmzl.execute-api.us-east-1.amazonaws.com/prod", // API Gateway endpoint to Lambda

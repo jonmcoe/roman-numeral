@@ -43,8 +43,6 @@
 
       function errorFunc(data, status, xhr) {
         const dataObject = data.responseJSON;
-        $('#output-field-roman').html(dataObject['errorMessage']);
-        $('#output-field-decimal').html(dataObject['errorMessage']);
         $('#input-field').css('background-color', 'red');
       }
 

@@ -1,7 +1,7 @@
 ---
 swagger: "2.0"
 info:
-  version: "2016-04-15T12:27:16Z"
+  version: "2016-04-15T16:09:10Z"
   title: "CaesarCalcAPI2"
 host: "a0p25chmzl.execute-api.us-east-1.amazonaws.com"
 basePath: "/prod"
@@ -10,8 +10,16 @@ schemes:
 paths:
   /:
     post:
+      consumes:
+      - "application/json"
       produces:
       - "application/json"
+      parameters:
+      - in: "body"
+        name: "Input"
+        required: true
+        schema:
+          $ref: "#/definitions/Input"
       responses:
         200:
           description: "200 response"
@@ -34,12 +42,18 @@ paths:
             responseParameters:
               method.response.header.Access-Control-Allow-Origin: "'*'"
             responseTemplates:
-              application/json: "#set($inputRoot = $input.path('$'))\n{\n  \"errorMessage\"\
-                \ : \"Bad Format\"\n}"
+              application/json: "#set($inputRoot = $input.path('$'))\n{\n  \"error\"\
+                \ : \"$inputRoot.errorMessage\"\n}"
           .*:
             statusCode: "200"
             responseParameters:
               method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json: "#set($inputRoot = $input.path('$'))\n{\n  \"decimal\"\
+                \ : $inputRoot.decimal,\n  \"roman\" : \"$inputRoot.roman\"\n}"
+        requestTemplates:
+          application/json: "#set($inputRoot = $input.path('$'))\n{\n  \"value\":\
+            \ \"$inputRoot.value\"\n}"
         uri: "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:618006114477:function:CaescarCalcLambda2/invocations"
         httpMethod: "POST"
         type: "aws"
@@ -72,10 +86,17 @@ paths:
           application/json: "{\"statusCode\": 200}"
         type: "mock"
 definitions:
+  Input:
+    type: "object"
+    required:
+    - "value"
+    properties:
+      value:
+        type: "string"
   Empty:
     type: "object"
   Error:
     type: "object"
     properties:
-      errorMessage:
+      error:
         type: "string"

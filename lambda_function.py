@@ -26,8 +26,8 @@ def lambda_handler(event, context):
             "roman": convert_to_roman(ans),
             "decimal": ans
         }
-    except Exception:
+    except Exception as e:
         logger.exception("Original: {0}, Translated: {1}".format(
             input_value, locals().get('final_string', 'unreachable')
         ))
-        raise Exception("Bad Request: Bad Parameters")
+        raise Exception("Bad Request: " + e.__class__.__name__ + e.message())

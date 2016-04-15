@@ -12,6 +12,8 @@
       border-style: solid;
       background-color: white;
       position: absolute;
+      min-width: 20px;
+      min-height: 20px
     }
 
     #input-field {
@@ -55,6 +57,10 @@
 
       function performRequest(){
         const inputData = $('#input-field').val().trim();
+
+        if (inputData == "") {
+          successFunc({"decimal": "", "roman": ""})
+        }
 
         if (inputData != lastValue) {
           if (validateInputData(inputData)) {

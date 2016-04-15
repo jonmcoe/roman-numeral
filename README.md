@@ -20,7 +20,7 @@ Request:
 }
 ```
 
-Response:
+Response, Status 200:
 ```json
 {
     "roman": "CCVI",
@@ -35,16 +35,14 @@ Request:
     "value": "suh dude"
 }
 ```
-Response:
+Response, Status 400:
 ```json
 {
     "errorMessage": "Bad format"
 }
 ```
 
-Note that **all** responses have status code of 200.
-
-String evaluates with a python `eval` (after converting roman tokens to decimal)so all python operations (+, -, *, /, **) 
+String evaluates with a python `eval` (after converting roman tokens to decimal) so all python operation like `+, -, *, /, **` 
 should be fair game. You can even do stuff like `sum( [ 982, v , x ** iii ] )`
 Note that roman numerals need to have spaces on either side. `X+5` or `(v + 7) ** 2` are not OK, but `X + 5` and `( v + 7) ** 2` should be.
 
@@ -58,8 +56,6 @@ Two outputs for the decimal and roman portions of response JSON. Or for the erro
 
 
 ## TODOs
-1. API Gateway response code
-    * Need to write rules into API Gateway so error responses have a 4xx status code, and update website accordingly
 1. Investigate existing roman numeral related libraries on PyPi and see if my code can be replaced.
 1. A better front-end thru React/Redux and real build tools.
 1. Domain name for API

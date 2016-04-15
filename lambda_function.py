@@ -30,4 +30,5 @@ def lambda_handler(event, context):
         logger.exception("Original: {0}, Translated: {1}".format(
             input_value, locals().get('final_string', 'unreachable')
         ))
-        raise Exception("Bad Request: " + e.__class__.__name__ + e.message())
+        raise e.__class__("Bad Request: " + e.__class__.__name__ + ' w/ ' + e.message)
+

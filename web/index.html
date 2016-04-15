@@ -36,9 +36,8 @@
       var lastValue = "";
 
       function successFunc(data, status, xhr) {
-        const dataObject = data.responseJSON;
-        $('#output-field-roman').html(dataObject['roman'] || 'Non understandi negativus et zeroem');
-        $('#output-field-decimal').html(dataObject['decimal']);
+        $('#output-field-roman').html(data['roman'] || 'Non understandi negativus et zeroem');
+        $('#output-field-decimal').html(data['decimal']);
         $('#input-field').css('background-color', 'white');
       }
 
@@ -47,21 +46,6 @@
         $('#output-field-roman').html(dataObject['errorMessage']);
         $('#output-field-decimal').html(dataObject['errorMessage']);
         $('#input-field').css('background-color', 'red');
-      }
-
-      //serves as a switch between successFunc and errorFunc until codes work right
-      function responseFunc(data, status, xhr) {
-        const dataObject = data.responseJSON;
-        console.log(dataObject);
-        if ('roman' in dataObject) {
-            successFunc(data, status, xhr)
-        }
-        else if ('errorMessage' in dataObject) {
-            errorFunc(data, status, xhr)
-        }
-        else {
-          console.log('problem')
-        }
       }
 
       function validateInputData(x){
@@ -83,9 +67,8 @@
                       method: 'POST',
                       data: JSON.stringify({value: inputData}),
                       contentType: 'application/json',
-                      //success: responseFunc,
-                      //error: errorFunc,
-                      complete: responseFunc,
+                      success: successFunc,
+                      error: errorFunc,
                       dataType: 'json'
                     }
             );

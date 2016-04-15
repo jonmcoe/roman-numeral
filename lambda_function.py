@@ -30,6 +30,4 @@ def lambda_handler(event, context):
         logger.exception("Original: {0}, Translated: {1}".format(
             input_value, locals().get('final_string', 'unreachable')
         ))
-        return {
-            "errorMessage": "Bad format"
-        }
+        raise Exception("Bad Request: Bad Parameters")

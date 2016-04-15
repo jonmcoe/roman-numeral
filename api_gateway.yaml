@@ -1,7 +1,7 @@
 ---
 swagger: "2.0"
 info:
-  version: "2016-04-15T16:09:10Z"
+  version: "2016-04-15T16:51:33Z"
   title: "CaesarCalcAPI2"
 host: "a0p25chmzl.execute-api.us-east-1.amazonaws.com"
 basePath: "/prod"
@@ -23,6 +23,8 @@ paths:
       responses:
         200:
           description: "200 response"
+          schema:
+            $ref: "#/definitions/Success"
           headers:
             Access-Control-Allow-Origin:
               type: "string"
@@ -99,4 +101,11 @@ definitions:
     type: "object"
     properties:
       error:
+        type: "string"
+  Success:
+    type: "object"
+    properties:
+      decimal:
+        type: "integer"
+      roman:
         type: "string"

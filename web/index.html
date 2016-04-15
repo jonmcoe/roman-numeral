@@ -22,13 +22,13 @@
     }
 
     #output-field-roman {
-      left: 400px;
-      top: 420px;
+      left: 420px;
+      top: 400px;
     }
 
     #output-field-decimal {
-      left: 400px;
-      top: 440px;
+      left: 420px;
+      top: 430px;
     }
     </style>
   </head>
@@ -59,7 +59,7 @@
         const inputData = $('#input-field').val().trim();
 
         if (inputData == "") {
-          successFunc({"decimal": "", "roman": ""})
+          successFunc({"decimal": "", "roman": " "})
         }
 
         if (inputData != lastValue) {

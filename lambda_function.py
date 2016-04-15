@@ -31,4 +31,3 @@ def lambda_handler(event, context):
             input_value, locals().get('final_string', 'unreachable')
         ))
         raise e.__class__("Bad Request: " + e.__class__.__name__ + ' w/ ' + e.message)
-

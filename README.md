@@ -56,11 +56,16 @@ Two outputs for the decimal and roman portions of response JSON. Or for the erro
 
 
 ## TODOs
+1. Build / Deploy tools
+    * Lambda: upload recent build zip to ARN
+    * API Gateway: import most recent swagger to ARN. Generate HTML and host somewhere?
+    * S3: upload most recent web directory to S3 bucket
 1. Investigate existing roman numeral related libraries on PyPi and see if my code can be replaced.
 1. A better front-end thru React/Redux and real build tools.
 1. Domain name for API
     * Website is served thru Cloudfront and Route53, thus the pretty URL (and certificate)
     * API is still using ugly API Gateway "execute-api.us-east-1.amazonaws.com" URL. Would like `api.caesarcalc.com`
+        * So far: set up a custom domain with API Gateway, cert thru StartSSL. Route53 doesn't see new cloudfront...
 1. Many invalid roman numerals convert without error, but not necessarily sanely.
     * `convert_to_decimal('iiiii')` == `5`, that's ok i guess.
     * `convert_to_decimal('ixixcixi')` == `128`, that's kinda weird

@@ -11,7 +11,7 @@ Super-minimal commandline usage with `main.py`
 ## API
 AWS Lambda and API Gateway. Contents of lambda function in file `lambda_function.py`
 
-POST to `https://a0p25chmzl.execute-api.us-east-1.amazonaws.com/prod` 
+POST to `https://api.caesarcalc.com` 
 
 Request:
 ```json

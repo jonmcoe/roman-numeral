@@ -66,7 +66,7 @@
         if (inputData != lastValue) {
           if (validateInputData(inputData)) {
             $.ajax(
-                    "https://a0p25chmzl.execute-api.us-east-1.amazonaws.com/prod", // API Gateway endpoint to Lambda
+                    "https://api.caesarcalc.com", // API Gateway endpoint to Lambda
                     {
                       method: 'POST',
                       data: JSON.stringify({value: inputData}),

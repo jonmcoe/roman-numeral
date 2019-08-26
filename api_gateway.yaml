@@ -3,8 +3,7 @@ swagger: "2.0"
 info:
   version: "2016-04-15T16:51:33Z"
   title: "CaesarCalcAPI2"
-host: "a0p25chmzl.execute-api.us-east-1.amazonaws.com"
-basePath: "/prod"
+host: "api.caesarcalc.com"
 schemes:
 - "https"
 paths:
@@ -38,6 +37,7 @@ paths:
             Access-Allow-Origin-Header:
               type: "string"
       x-amazon-apigateway-integration:
+        uri: "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:618006114477:function:CaescarCalcLambda2/invocations"
         responses:
           'Bad Request: .*':
             statusCode: "400"
@@ -53,11 +53,11 @@ paths:
             responseTemplates:
               application/json: "#set($inputRoot = $input.path('$'))\n{\n  \"decimal\"\
                 \ : $inputRoot.decimal,\n  \"roman\" : \"$inputRoot.roman\"\n}"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
         requestTemplates:
           application/json: "#set($inputRoot = $input.path('$'))\n{\n  \"value\":\
             \ \"$inputRoot.value\"\n}"
-        uri: "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:618006114477:function:CaescarCalcLambda2/invocations"
-        httpMethod: "POST"
         type: "aws"
     options:
       consumes:
@@ -84,10 +84,14 @@ paths:
               method.response.header.Access-Control-Allow-Methods: "'POST,OPTIONS'"
               method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
               method.response.header.Access-Control-Allow-Origin: "'*'"
+        passthroughBehavior: "when_no_match"
         requestTemplates:
           application/json: "{\"statusCode\": 200}"
         type: "mock"
 definitions:
+  Empty:
+    type: "object"
+    title: "Empty Schema"
   Input:
     type: "object"
     required:
@@ -95,13 +99,13 @@ definitions:
     properties:
       value:
         type: "string"
-  Empty:
-    type: "object"
+    title: "Input Schema"
   Error:
     type: "object"
     properties:
       error:
         type: "string"
+    title: "Error Schema"
   Success:
     type: "object"
     properties:
@@ -109,3 +113,4 @@ definitions:
         type: "integer"
       roman:
         type: "string"
+    title: "Success Schema"

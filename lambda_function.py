@@ -24,14 +24,14 @@ def lambda_handler(event, context):
             raise MissingRequiredParameterException(missing_params)
 
         input_value = event['value']
-        input_value = input_value if isinstance(input_value, basestring) else str(input_value)
+        input_value = input_value if isinstance(input_value, str) else str(input_value)
 
         # extremely half-ass (quarter-ass?) parsing
         initial_chunks = input_value.split(' ')  # must have spaces between operators and roman characters
         formatter = lambda x: str(convert_to_decimal(x.strip())) if x.isalpha() else x
         chunks = map(formatter, initial_chunks)
         final_string = ''.join(chunks)
-        ans = eval(final_string)  # unsafe? sure. but it's ok bc its an AWS lambda and not a "real" machine
+        ans = eval(final_string) or 0  # unsafe? sure. but it's ok bc its an AWS lambda and not a "real" machine
 
         return {
             "roman": convert_to_roman(ans),
@@ -41,4 +41,5 @@ def lambda_handler(event, context):
         logger.exception("Original: {0}, Translated: {1}".format(
             input_value, locals().get('final_string', 'unreachable')
         ))
-        raise Exception("Bad Request: " + e.__class__.__name__ + ' w/ ' + e.message)
+        raise Exception("Bad Request: " + e.__class__.__name__ + ' w/ ' + str(e))
+
